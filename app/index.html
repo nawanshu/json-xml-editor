@@ -1,0 +1,149 @@
+<!doctype html>
+<html ng-app="jsonxmleditorApp">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="node_modules/mdbootstrap/css/mdb.min.css">
+
+  <!-- endbuild -->
+</head>
+
+<body ng-controller="homeCtrl">
+  <!--[if lte IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+  <!-- Add your site or application content here -->
+  <div class="jumbotron">
+    <div class="container-fluid">
+
+    </div>
+  </div>
+  <div class="container-fluid text-center">
+    <div class="row content">
+      <div class="col md-5">
+        <div class="card card-body editor-panel">
+          <div class="card-title">Input</div>
+          <div class="card-text">
+            <div ng-show="!obj.xmlTojsonFlag" ui-ace ng-model="obj.input" ng-change="onChange()"></div>
+            <div ng-show="obj.xmltojsonFlag" ui-ace="{mode: 'xml'}" ng-model="obj.input" ng-change="onChange()"></div>
+          </div>
+        </div>
+        <div ng-show="obj.isErrorLeftPanel" class="panel-footer">
+          <div class="alert alert-danger">
+            <strong ng-bind="obj.errorMessageLeftPanel"></strong>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="card card-body action-panel editor-action-panel editor-panel">
+          <div class="card-text vcenter">
+            <div class="card card-body editor-action-panel">
+              <button type="button" class="btn btn-circle btn-raised ripple-effect btn-primary btn-lg" ng-click="onConvert(obj.header)">
+                <span class="glyphicon glyphicon-forward"></span>
+              </button>
+            </div>
+            <br>
+            <br>
+            <div class="card card-body editor-action-panel">
+              <ul class="list-group">
+                <li ng-repeat="list in obj.actionList" class="list-group-item editor-list">
+                  {{list.name}}
+                  <div class="material-switch pull-right">
+                    <input id="someSwitchOptionSuccess{{$index}}" ng-model="list.checked" name="someSwitchOption001{{$index}}" ng-click="updateSelection($index, obj.actionList, list.name); $event.stopPropagation()"
+                      type="checkbox" />
+                    <label for="someSwitchOptionSuccess{{$index}}" class="label-success"></label>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <br>
+            <br>
+            <div class="card card-body editor-action-panel">
+              <button type="button" class="btn btn-circle btn-raised ripple-effect btn-primary btn-lg" ng-click="onInverse(obj.header)">
+                <span class="glyphicon glyphicon-backward"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="card card-body editor-panel">
+          <div class="card-title">
+            <button id={{obj.modeId}} ng-show="obj.xmltojsonFlag" type="button" class="btn btn-raised ripple-effect btn-primary btn-sm"
+              ng-click="onCopyMode(obj.modeId)">
+              <span class="glyphicon glyphicon-copy" ng-bind="obj.modeName"></span>
+            </button>
+          </div>
+          <div class="card-text">
+            <div ng-show="obj.xmlTreeFlag || obj.jsontoxmlFlag" ui-ace="{mode:'xml'}" ng-model="obj.data"></div>
+            <angular-jsoneditor ng-show="(!obj.copyMode && (obj.jsonTreeFlag || obj.xmltojsonFlag))" ng-model="obj.data" options="obj.options"></angular-jsoneditor>
+            <div ng-show="obj.copyMode" ui-ace ng-model="obj.data"></div>
+          </div>
+
+        </div>
+        <div ng-show="obj.isErrorRightPanel" class="panel-footer">
+          <div class="alert alert-danger">
+            <strong ng-bind="obj.errorMessageRightPanel"></strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+  <script>
+    !function (A, n, g, u, l, a, r) {
+      A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
+        (A[l].q = A[l].q || []).push(arguments)
+      }, A[l].l = +new Date, a = n.createElement(g),
+        r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+    }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-XXXXX-X');
+    ga('send', 'pageview');
+  </script>
+
+  <!-- build:js(.) scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
+  <script src="node_modules/angular-ui-ace/src/ui-ace.js"></script>
+  <script src="node_modules/jshint/dist/jshint.js"></script>
+  <script src="library/vkbeautify.0.99.00.beta.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/x2js/1.2.0/xml2json.min.js"></script>
+  <script src="node_modules/mdbootstrap/js/mdb.min.js"></script>
+  <script src="node_modules/angular-jsoneditor/dist/angular-jsoneditor.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers/homeCtrl.js"></script>
+
+
+  <!-- endbuild -->
+</body>
+
+</html>
