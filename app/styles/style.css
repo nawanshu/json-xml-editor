@@ -1,10 +1,10 @@
-.ace_editor{
+.ace_editor { 
     height: 700px;
     overflow-x: scroll;
     overflow-y: scroll;
 }
 .jsoneditor{
-    height: 650px !important;
+  height: 650px !important;
 }
 .navbar-header{
     font-family: "Calibri";
@@ -12,31 +12,33 @@
 }
 .editor-panel{
     height: 700px;
-    overflow-x: scroll;
+    overflow-x: scroll;  
 }
-material-switch>input[type="checkbox"]{
-    display: none;
+.material-switch > input[type="checkbox"] {
+    display: none;   
 }
-.material-switch>label{
+
+.material-switch > label {
     cursor: pointer;
     height: 0px;
-    position: relative;
-    width: 100px;
+    position: relative; 
+    width: 100px;  
 }
-.material-switch>label:before{
-    background: rgb(0,0,0);
-    box-shadow: inset 0px 0px 0px 10px rgba(0,0,0,0.5);
+
+.material-switch > label::before {
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     content: '';
     height: 16px;
     margin-top: -8px;
-    position: absolute;
+    position:absolute;
     opacity: 0.3;
     transition: all 0.4s ease-in-out;
     width: 40px;
 }
-.material-switch>label:after{
-    background: rbg(255, 255, 255);
+.material-switch > label::after {
+    background: rgb(255, 255, 255);
     border-radius: 16px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     content: '';
@@ -48,19 +50,19 @@ material-switch>input[type="checkbox"]{
     transition: all 0.3s ease-in-out;
     width: 24px;
 }
-.material-switch>input[type="checkbox"]:checked+label::before{
+.material-switch > input[type="checkbox"]:checked + label::before {
     background: inherit;
     opacity: 0.5;
 }
-.material-switch>input[type="checkbox"]:checked+label::after{
+.material-switch > input[type="checkbox"]:checked + label::after {
     background: inherit;
-    opacity: 0.5;
+    left: 20px;
 }
 label{
     max-width: 0% !important;
 }
-.vcenter{
-    margin-top: 100px;
+.vcenter {
+        margin-top: 100px;
 }
 /* -- import Bootstrap v3 ----------------------------- */
 @import "//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css";
@@ -597,15 +599,14 @@ body {
     position: absolute;
     right: 0;
     bottom: 0;
-    left: 0px;
+    left: 0;
 }
 .card-footer{
     font-family: "Calibri" !important;
     background-color: red !important;
     font-size: 40px !important;
 }
-#footer{
-    height: 20px !important;
-    background-color: #f5f5f5;
+#footer {
+  height: 20px !important;
+  background-color: #f5f5f5;
 }
-
