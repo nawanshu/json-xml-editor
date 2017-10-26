@@ -1,149 +1,176 @@
 <!doctype html>
-<html ng-app="jsonxmleditorApp">
+<html ng-app="myApp">
 
 <head>
-  <meta charset="utf-8">
-  <title></title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width">
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-  <!-- build:css(.) styles/vendor.css -->
-  <!-- bower:css -->
-  <!-- endbower -->
-  <!-- endbuild -->
-  <!-- build:css(.tmp) styles/main.css -->
-  <link rel="stylesheet" href="styles/style.css">
-  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="node_modules/mdbootstrap/css/mdb.min.css">
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- <link rel="stylesheet" href="styles/main.css"> -->
+    <link rel="stylesheet" href="library/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/style.css">
 
-  <!-- endbuild -->
+    <link rel="stylesheet" href="library/mdb.min.css">
+    <!-- <link rel="stylesheet" href="node_modules/jsoneditor/dist/jsoneditor.css"> -->
+
+    <script type="text/javascript" src="library/jquery-3.2.1.min.js"></script>
+    <script src="library/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+     <!-- <script type="text/javascript" src="library/ace.js"></script>  -->
+    <script src="library/angular-1.6.5/angular.min.js"></script>
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/HomeCtrl.js"></script>
+    <script src="scripts/services/employees.js"></script>
+    <script src="scripts/directives/jsonTextDir.js"></script>
+      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js"></script> -->  
+	  <script type="text/javascript" src="library/ace-builds-master/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="library/ui-ace-master/src/ui-ace.js"></script>
+    <script type="text/javascript" src="library/jsonlint.js"></script>
+    <script type="text/javascript" src="library/vkbeautify.0.99.00.beta.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/x2js/1.2.0/xml2json.min.js"></script> -->
+    <script type="text/javascript" src="library/xml2json.min.js"></script>
+
+    <script type="text/javascript" src="library/vkbeautify.0.99.00.beta.js"></script>
+    <script type="text/javascript" src="library/xmlChecker.js"></script>
+    <script type="text/javascript" src="library/mdb.min.js"></script>
+    <script type="text/javascript" src="library/parser.js"></script>
+
+
+
+    <!--  <script src="scripts/components/myComp.js"></script> -->
+    <!-- <script src="node_modules/jsoneditor/dist/jsoneditor.js"></script> -->
+    <script src="library/angular-jsoneditor/dist/angular-jsoneditor.js"></script>
 </head>
 
-<body ng-controller="homeCtrl">
-  <!--[if lte IE 8]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+<body ng-controller="HomeCtrl">
+    <div class="jumbotron">
+        <div class="container-fluid">
+            <!-- <div class="navbar-header">XML/JSON Tree Viewer/Editor</div> -->
+        </div>
+    </div>
+    <div class="container-fluid text-center">
+        <div class="row content">
+            <div class="col-md-5">
+                <div class="card card-body editor-panel">
+                    <div class="card-title">Input</div>
+                    <div class="card-text">
+                        <div ng-show="!obj.xmltojsonFlag" ui-ace ng-model="obj.input" ng-change="onChange()"></div>
+                        <div ng-show="obj.xmltojsonFlag" ui-ace="{ mode: 'xml'}" ng-model="obj.input" ng-change="onChange()"></div>
+                    </div>
 
-  <!-- Add your site or application content here -->
-  <div class="jumbotron">
-    <div class="container-fluid">
+                </div>
+                <div ng-show="obj.isErrorLeftPanel" class="panel-footer">
+                    <div class="alert alert-danger">
+                        <strong ng-bind="obj.errorMessageLeftPanel"></strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card card-body action-panel editor-action-panel editor-panel">
+                    <div class="card-text vcenter">
+
+                        <!-- <button type="button" class="btn btn-primary" ng-click="onConvert(obj.jsonTreeFlag)">></button> -->
+                        <!-- <div class="checkbox" ng-repeat="list in obj.actionList">
+                            <label><input type="checkbox" value="list" ng-bind="list"></label>
+                        </div> -->
+                        <div class="card card-body editor-action-panel">
+                            <!-- <div class="panel-heading">Action</div>
+                            <a href="#" class="btn btn-info btn-lg" ng-click="onConvert(obj.jsonTreeFlag)">
+                                <span class="glyphicon glyphicon-forward"></span>
+                            </a> -->
+                            <button type="button" class="btn btn-circle btn-raised ripple-effect btn-primary btn-lg" ng-click="onConvert(obj.header)"><span class="glyphicon glyphicon-forward"></span></button>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="card card-body editor-action-panel">
+                            <!-- <div class="panel-heading">What to do?</div> -->
+                            <ul class="list-group">
+                                <li ng-repeat="list in obj.actionList" class="list-group-item editor-list">
+                                    {{list.name}}
+                                    <div class="material-switch pull-right">
+                                        <input id="someSwitchOptionSuccess{{$index}}" ng-model="list.checked" name="someSwitchOption001{{index}}" ng-click="updateSelection($index, obj.actionList, list.name);$event.stopPropagation()"
+                                            type="checkbox" />
+                                        <label for="someSwitchOptionSuccess{{$index}}" class="label-success"></label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="card card-body editor-action-panel">
+                            <!-- <div class="panel-heading">Action</div>
+                            <a href="#" class="btn btn-info btn-lg" ng-click="onConvert(obj.jsonTreeFlag)">
+                                <span class="glyphicon glyphicon-forward"></span>
+                            </a> -->
+                            <button type="button" class="btn btn-circle btn-raised ripple-effect btn-primary btn-lg" ng-click="onInverse(obj.header)"><span class="glyphicon glyphicon-backward"></span></button>
+                        </div>
+                        <!-- <button type="button" class="btn btn-primary" ng-click="onInverse(obj.jsonTreeFlag)">To Left</button> -->
+                    </div>
+
+                    <!-- <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Choose Action
+                            <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="list in obj.actionList">
+                                    <a ng-click="onChoose(list)" ng-bind="list"></a></li>
+                            </ul>
+                            <div ng-bind="obj.header"></div>
+                        </div> -->
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card card-body editor-panel">
+                    <div class="card-title">
+                        <button id={{obj.modeId}} ng-show="obj.xmltojsonFlag" type="button" class="btn btn-raised ripple-effect btn-primary btn-sm"
+                            ng-click="onCopyMode(obj.modeId)"><span class="glyphicon glyphicon-copy" ng-bind="obj.modeName"></span></button>
+                    </div>
+                    <div class="card-text">
+
+                        <div ng-show="obj.xmlTreeFlag || obj.jsontoxmlFlag" ui-ace="{ mode: 'xml'}" ng-model="obj.data"></div>
+                        <angular-jsoneditor ng-show="(!obj.copyMode && (obj.jsonTreeFlag || obj.xmltojsonFlag))" ng-model="obj.data" options="obj.options"></angular-jsoneditor>
+                        <!-- <div ui-ace ng-show="obj.copyMode" ng-bind="obj.data"></div> -->
+                        <div ng-show="obj.copyMode" ui-ace ng-model="obj.data"></div>
+                    </div>
+                    <!-- <div class="panel-footer">Panel Footer</div> -->
+                </div>
+                <div ng-show="obj.isErrorRightPanel" class="panel-footer">
+                    <div class="alert alert-danger">
+                        <strong ng-bind="obj.errorMessageRightPanel"></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
-  </div>
-  <div class="container-fluid text-center">
-    <div class="row content">
-      <div class="col md-5">
-        <div class="card card-body editor-panel">
-          <div class="card-title">Input</div>
-          <div class="card-text">
-            <div ng-show="!obj.xmlTojsonFlag" ui-ace ng-model="obj.input" ng-change="onChange()"></div>
-            <div ng-show="obj.xmltojsonFlag" ui-ace="{mode: 'xml'}" ng-model="obj.input" ng-change="onChange()"></div>
-          </div>
-        </div>
-        <div ng-show="obj.isErrorLeftPanel" class="panel-footer">
-          <div class="alert alert-danger">
-            <strong ng-bind="obj.errorMessageLeftPanel"></strong>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2">
-        <div class="card card-body action-panel editor-action-panel editor-panel">
-          <div class="card-text vcenter">
-            <div class="card card-body editor-action-panel">
-              <button type="button" class="btn btn-circle btn-raised ripple-effect btn-primary btn-lg" ng-click="onConvert(obj.header)">
-                <span class="glyphicon glyphicon-forward"></span>
-              </button>
-            </div>
-            <br>
-            <br>
-            <div class="card card-body editor-action-panel">
-              <ul class="list-group">
-                <li ng-repeat="list in obj.actionList" class="list-group-item editor-list">
-                  {{list.name}}
-                  <div class="material-switch pull-right">
-                    <input id="someSwitchOptionSuccess{{$index}}" ng-model="list.checked" name="someSwitchOption001{{$index}}" ng-click="updateSelection($index, obj.actionList, list.name); $event.stopPropagation()"
-                      type="checkbox" />
-                    <label for="someSwitchOptionSuccess{{$index}}" class="label-success"></label>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <br>
-            <br>
-            <div class="card card-body editor-action-panel">
-              <button type="button" class="btn btn-circle btn-raised ripple-effect btn-primary btn-lg" ng-click="onInverse(obj.header)">
-                <span class="glyphicon glyphicon-backward"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-5">
-        <div class="card card-body editor-panel">
-          <div class="card-title">
-            <button id={{obj.modeId}} ng-show="obj.xmltojsonFlag" type="button" class="btn btn-raised ripple-effect btn-primary btn-sm"
-              ng-click="onCopyMode(obj.modeId)">
-              <span class="glyphicon glyphicon-copy" ng-bind="obj.modeName"></span>
-            </button>
-          </div>
-          <div class="card-text">
-            <div ng-show="obj.xmlTreeFlag || obj.jsontoxmlFlag" ui-ace="{mode:'xml'}" ng-model="obj.data"></div>
-            <angular-jsoneditor ng-show="(!obj.copyMode && (obj.jsonTreeFlag || obj.xmltojsonFlag))" ng-model="obj.data" options="obj.options"></angular-jsoneditor>
-            <div ng-show="obj.copyMode" ui-ace ng-model="obj.data"></div>
-          </div>
-
-        </div>
-        <div ng-show="obj.isErrorRightPanel" class="panel-footer">
-          <div class="alert alert-danger">
-            <strong ng-bind="obj.errorMessageRightPanel"></strong>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-  </div>
+    <!-- <footer class="container-fluid">
+        <p class="text-muted credit">Made by Nawanshu</p>
+    </footer> -->
 
 
-  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-  <script>
-    !function (A, n, g, u, l, a, r) {
-      A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
-        (A[l].q = A[l].q || []).push(arguments)
-      }, A[l].l = +new Date, a = n.createElement(g),
-        r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
-    }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-XXXXX-X');
-    ga('send', 'pageview');
-  </script>
-
-  <!-- build:js(.) scripts/vendor.js -->
-  <!-- bower:js -->
-  <script src="node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-animate/angular-animate.js"></script>
-  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-  <script src="bower_components/angular-resource/angular-resource.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-  <script src="bower_components/angular-touch/angular-touch.js"></script>
-  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
-  <script src="node_modules/angular-ui-ace/src/ui-ace.js"></script>
-  <script src="node_modules/jshint/dist/jshint.js"></script>
-  <script src="library/vkbeautify.0.99.00.beta.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/x2js/1.2.0/xml2json.min.js"></script>
-  <script src="node_modules/mdbootstrap/js/mdb.min.js"></script>
-  <script src="node_modules/angular-jsoneditor/dist/angular-jsoneditor.js"></script>
-  <!-- endbower -->
-  <!-- endbuild -->
-
-  <!-- build:js({.tmp,app}) scripts/scripts.js -->
-  <script src="scripts/app.js"></script>
-  <script src="scripts/controllers/homeCtrl.js"></script>
+    <!-- <div class="panel panel-default">
+        <!-- <div class="panel-heading"></div> -->
+    <!-- <div class="panel-body">
+            <div class="row"> -->
+    <!-- <div class="col-md-6"><textarea json-text-dir ng-model="obj.input"></textarea></div> -->
 
 
-  <!-- endbuild -->
+
+    <!-- xml to json -->
+    <!-- <div class="col-md-1"><button type="button" class="btn btn-primary" ng-click="xmlToJson()">></button></div>
+        <div class="col-md-4"><angular-jsoneditor ng-model="obj.data" options="obj.options" ></angular-jsoneditor></div> -->
+
+    <!--  xml tree view  -->
+
+    <!--  ui-ace="{mode: 'xml', showGutter: true}" -->
+    <!-- json tree view -->
+    <!-- <div class="col-md-1"><button type="button" class="btn btn-primary" ng-click="toJsonTree()">></button></div> -->
+    <!-- <div class="col-md-4"><angular-jsoneditor ng-model="obj.data" options="obj.options" ></angular-jsoneditor></div> -->
+    <!-- </div> -->
+
+
 </body>
 
 </html>
